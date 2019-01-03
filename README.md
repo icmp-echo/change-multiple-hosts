@@ -5,4 +5,4 @@ just gather the list of host & command(s) & username-pass to change with and goo
 let me know if any questions.
 p.s. if you get ssh error check if you have "requested strict checking" enabled. 
 or try ssh-keygen -R "hostname" 
-                     "ip"
+                     and "ip"
