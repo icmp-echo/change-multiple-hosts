@@ -1,0 +1,60 @@
+#!/usr/bin/expect -f
+
+
+  set hostname [lindex $argv 0]
+
+	set username anything
+	
+	set password you-like
+
+
+	if {[llength $argv] == 0} {
+          
+	  send_user " !!!  WARNING: !!!  Usage: pass correct variables with your script\n"
+	  
+	  exit 1
+	}
+	
+	log_user 1
+
+
+        spawn ssh -q -o StrictHostKeyChecking=no $username@$hostname
+        
+  
+	expect {
+        
+        timeout { send_user "\nFailed to get password prompt\n"; exit 1 }
+      
+        eof { send_user "\nSSH failure for $hostname\n"; exit 1 }
+  
+        ">" {}
+  
+        "*word:" {
+    
+        send "$password\r"
+        
+        }
+
+       }
+   
+        expect "*#"
+	
+	send "configure terminal\n"
+	
+	expect "*#"
+	
+	send "errdisable recovery interval 600\n"
+	
+	expect "*#"
+	
+	send "end\n"
+	
+	expect "*#"
+
+  send "wr\n"
+	
+  expect "*#"
+
+  send "exit\n"
+
+	send_user "\nTask Completed Successfully.\n
